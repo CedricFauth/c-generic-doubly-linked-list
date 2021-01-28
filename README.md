@@ -18,13 +18,14 @@
 ### Standard Functions
 - [ ] dll_new
 - [ ] dll_delete
-- [ ] dll_insert (left, right)
-- [ ] dll_remove (left, right)
-- [ ] dll_push_l/r (using insert)
-- [ ] dll_pop_l/r (using remove)
+- [ ] dll_display
+- [ ] dll_insert (from both sides)
+- [ ] dll_remove (from both sides)
+- [ ] dll_push (from both sides)
+- [ ] dll_pop (from both sides)
 - [ ] dll_count
-- [ ] dll_index
-- [ ] dll_get
+- [ ] dll_index (from both sides)
+- [ ] dll_get (from both sides)
 - [ ] dll_reverse
 - [ ] dll_extend
 - [ ] dll_clear
