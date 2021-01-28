@@ -13,23 +13,30 @@
 ## Todos
 ### General
 - [ ] Project structure (Makefile, Directories, Sources, Headers)
-- [ ] structs for list and elements
+- [ ] structs for list and nodes
 ### Standard Functions
-- [ ] new_list
-- [ ] delete_list
-- [ ] push_left
-- [ ] push_right
-- [ ] pop_left
-- [ ] pop_right
-- [ ] count
-- [ ] insert
-- [ ] remove
-- [ ] index
-- [ ] reverse
-- [ ] extend
+- [ ] dll_new
+- [ ] dll_delete
+- [ ] dll_insert (left, right)
+- [ ] dll_remove (left, right)
+- [ ] dll_push_l/r (using insert)
+- [ ] dll_pop_l/r (using remove)
+- [ ] dll_count
+- [ ] dll_index
+- [ ] dll_get
+- [ ] dll_reverse
+- [ ] dll_extend
+- [ ] dll_clear
 ### Higher Order Functions
-- [ ] sort
-- [ ] filter
-- [ ] map
-- [ ] reduce
+- [ ] dll_foreach
+- [ ] dll_sort
+- [ ] dll_filter
+- [ ] dll_map
+- [ ] dll_reduce
 ### Iterators
+- [ ] dll_iter_begin
+- [ ] dll_iter_end
+- [ ] dll_has_next
+- [ ] dll_has_prev
+- [ ] dll_next
+- [ ] dll_prev
