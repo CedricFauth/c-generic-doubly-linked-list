@@ -1,4 +1,4 @@
-# Universal Doubly Linked List (dll)
+# Universal Doubly Linked List
 
 ```
 +--dll--+      +-node-+     +-node-+     +-node-+
