@@ -1,12 +1,13 @@
 # Universal Doubly Linked List
 
 ```
-+--dll--+      +-node-+     +-node-+
-| first-|----->| next-|---->| next |<---+
-| last--|-+    | prev |<----|-prev |    |
-+-------+ |    | data |     | data |    |
-          |    +------+     +------+    |
-          +-----------------------------+
++--dll--+      +-node-+     +-node-+     +-node-+
+| first-|----->| next-|---->| next |---->| next |<---+
+| last--|-+    | prev |<----|-prev |<----|-prev |    |
++-------+ |    | data |     | data |     | data |    |
+          |    +------+     +------+     +------+    |
+          |                                          |
+          +------------------------------------------+
 ```
 
 ## Conventions
