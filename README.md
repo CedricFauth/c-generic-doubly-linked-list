@@ -13,11 +13,11 @@
 
 ## Todos
 ### General
-- [ ] Project structure (Makefile, Directories, Sources, Headers)
-- [ ] structs for list and nodes
+- [x] Project structure (Makefile, Directories, Sources, Headers)
+- [x] structs for list and nodes
 ### Standard Functions
-- [ ] dll_new
-- [ ] dll_delete
+- [ ] dll_new (+ dll_new_node)
+- [ ] dll_delete (+ dll_delete_node)
 - [ ] dll_display
 - [ ] dll_insert (from both sides)
 - [ ] dll_remove (from both sides)
