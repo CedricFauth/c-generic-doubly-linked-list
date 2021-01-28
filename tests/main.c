@@ -3,10 +3,7 @@
 
 int main(int argc, char const *argv[]) {
 	// testing if it works
-	dll_node_t note;
-	dll_t d;
-	d.first = &note;
-	d.last = NULL;
+	//dll_t* d = dll_new();
 
 	return 0;
 }

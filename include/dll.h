@@ -1,20 +1,31 @@
-#ifndef _DOUBLY_LINKED_LIST_
-#define _DOUBLY_LINKED_LIST_
+#ifndef __DOUBLY_LINKED_LIST
+#define __DOUBLY_LINKED_LIST
 
-typedef struct dll_node dll_node_t;
-typedef struct dll dll_t;
+/**
+ * @brief dll_t is the type of the doubly-linked-list (dll)
+ * forward declaration of dll_t; you can only use dll_t POINTERS
+ */
+typedef struct __dll_internal dll_t;
 
-struct dll_node {
-	dll_node_t *prev;
-	dll_node_t *next;
-	
-	void *data;
-};
+/**
+ * @brief function pointer for deleting user data
+ * user can use create a function to free or remove own data
+ */
+typedef void (*delete_data_fun)(void *data);
 
-struct dll {
-	dll_node_t *first;
-	dll_node_t *last;
-	// optional: length
-};
+/**
+ * @brief creates new doubly-linked-list (dll)
+ * 
+ * @return dll_t* pointer to a list
+ */
+dll_t *dll_new();
 
-#endif//_DOUBLY_LINKED_LIST_
+/**
+ * @brief deletes dll and optionally all user data
+ * 
+ * @param list list to delete
+ * @param func see typedefs; function to free/delete user data
+ */
+void dll_delete(dll_t *list, delete_data_fun);
+
+#endif//__DOUBLY_LINKED_LIST

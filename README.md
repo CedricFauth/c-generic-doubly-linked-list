@@ -1,5 +1,14 @@
 # Universal Doubly Linked List
 
+```
++--dll--+      +-node-+     +-node-+
+| first-|----->| next-|---->| next |<---+
+| last--|-+    | prev |<----|-prev |    |
++-------+ |    | data |     | data |    |
+          |    +------+     +------+    |
+          +-----------------------------+
+```
+
 ## Conventions
 - write smart and clean code - but readable
 - refactor your code
