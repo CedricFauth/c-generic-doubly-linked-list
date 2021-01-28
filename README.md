@@ -25,7 +25,7 @@
 - [x] Project structure (Makefile, Directories, Sources, Headers)
 - [x] structs for list and nodes
 ### Standard Functions
-- [ ] dll_new (+ dll_new_node)
+- [x] dll_new (+ dll_new_node)
 - [ ] dll_delete (+ dll_delete_node)
 - [ ] dll_display
 - [ ] dll_insert (from both sides)
