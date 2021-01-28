@@ -11,4 +11,22 @@
 - use snake_case NOT camelCase, kebab-case...
 
 ## Todos
-
+### General
+- [ ] Project structure (Makefile, Directories, Sources, Headers)
+- [ ] structs for list and elements
+### Standard Functions
+- [ ] new_list
+- [ ] delete_list
+- [ ] push_left
+- [ ] push_right
+- [ ] pop_left
+- [ ] pop_right
+- [ ] count
+- [ ] insert
+- [ ] remove
+- [ ] index
+# Higher Order Functions
+- [ ] filter
+- [ ] map
+- [ ] reduce
+# Iterators
