@@ -27,9 +27,9 @@
 - [ ] index
 - [ ] reverse
 - [ ] extend
-# Higher Order Functions
+### Higher Order Functions
 - [ ] sort
 - [ ] filter
 - [ ] map
 - [ ] reduce
-# Iterators
+### Iterators
