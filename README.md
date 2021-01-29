@@ -28,7 +28,7 @@
 ### Standard Functions
 - [x] dll_new (+ dll_new_node)
 - [x] dll_delete (+ dll_delete_node)
-- [ ] dll_display
+- [x] dll_display
 - [ ] dll_insert (from both sides)
 - [ ] dll_remove (from both sides)
 - [ ] dll_push (from both sides)

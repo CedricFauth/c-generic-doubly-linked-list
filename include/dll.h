@@ -20,6 +20,12 @@ typedef struct __dll_internal dll_t;
 typedef void (*delete_data_fun)(void *data);
 
 /**
+ * @brief function pointer for displaying user data
+ * 
+ */
+typedef void (*display_data_fun)(void *data);
+
+/**
  * @brief creates new doubly-linked-list (dll)
  *
  * @return dll_t* pointer to a list
@@ -33,5 +39,7 @@ dll_t *dll_new();
  * @param func see typedefs; function to free/delete user data
  */
 void dll_delete(dll_t *list, delete_data_fun func);
+
+void dll_display(dll_t *list, display_data_fun func);
 
 #endif//__DOUBLY_LINKED_LIST

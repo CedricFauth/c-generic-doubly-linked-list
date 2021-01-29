@@ -8,7 +8,7 @@ struct __dll_node_internal {
     dll_node_t *prev; // link to previous node
     dll_node_t *next; // link to next node
 
-    void *data;
+    void *data; // link to data
 };
 
 struct __dll_internal {
@@ -57,6 +57,12 @@ dll_node_t *dll_new_node(void *data) {
     return node;
 }
 
+/**
+ * @brief deletes a node and optionally its data
+ * 
+ * @param node node to delete
+ * @param func user data delete function
+ */
 void dll_delete_node(dll_node_t *node, delete_data_fun func) {
     if (!node) return;
     if (func) (*func)(node->data);
@@ -76,6 +82,31 @@ void dll_delete(dll_t *list, delete_data_fun func) {
     free(list);
 }
 
+// see dll.h
+void dll_display(dll_t *list, display_data_fun func) {
+    if (!list) {
+        printf("null\n");
+        return;
+    }
+    dll_node_t *curr = list->first;
+    if (!curr) {
+        printf("empty\n");
+        return;
+    }
+    while (curr) {
+        printf("[");
+        if (func) (*func)(curr->data);
+        printf("]");
+        curr = curr->next;
+        if (curr) printf("<=>");
+    }
+    printf("\n");
+}
+
+void test_display(void *data) {
+    printf("%d", (char)data);
+}
+
 void test() {
     dll_t *list = dll_new();
     dll_node_t *n1 = dll_new_node(NULL);
@@ -83,14 +114,19 @@ void test() {
     dll_node_t *n3 = dll_new_node(NULL);
 
     n1->next = n2;
+    n1->data = (void *)11;
 
     n2->prev = n1;
     n2->next = n3;
+    n2->data = (void *)25;
 
     n3->prev = n2;
+    n3->data = (void *)39;
 
     list->first = n1;
     list->last = n3;
+
+    dll_display(list, test_display);
 
     dll_delete(list, NULL);
 }
