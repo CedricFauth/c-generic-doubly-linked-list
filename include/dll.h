@@ -1,5 +1,5 @@
-#ifndef __DOUBLY_LINKED_LIST
-#define __DOUBLY_LINKED_LIST
+#ifndef _DOUBLY_LINKED_LIST
+#define _DOUBLY_LINKED_LIST
 
 /**
  * @brief just for testing
@@ -42,4 +42,6 @@ void dll_delete(dll_t *list, delete_data_fun func);
 
 void dll_display(dll_t *list, display_data_fun func);
 
-#endif//__DOUBLY_LINKED_LIST
+void dll_insert(dll_t *list, int pos, void *data);
+
+#endif//_DOUBLY_LINKED_LIST
