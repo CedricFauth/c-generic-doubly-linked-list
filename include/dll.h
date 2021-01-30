@@ -2,12 +2,6 @@
 #define _DOUBLY_LINKED_LIST
 
 /**
- * @brief just for testing
- * @todo remove  
- */
-void test();
-
-/**
  * @brief dll_t is the type of the doubly-linked-list (dll)
  * forward declaration of dll_t; you can only use dll_t POINTERS
  */
