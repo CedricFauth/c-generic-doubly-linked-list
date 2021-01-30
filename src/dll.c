@@ -3,16 +3,16 @@
 #include <stddef.h>
 #include "dll.h"
 
-typedef struct __dll_node_internal dll_node_t;
+typedef struct _dll_node_internal dll_node_t;
 
-struct __dll_node_internal {
+struct _dll_node_internal {
     dll_node_t *prev; // link to previous node
     dll_node_t *next; // link to next node
 
     void *data; // link to data
 };
 
-struct __dll_internal {
+struct _dll_internal {
     dll_node_t end;
     size_t size;
 };

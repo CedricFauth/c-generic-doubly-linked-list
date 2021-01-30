@@ -11,7 +11,7 @@ void test();
  * @brief dll_t is the type of the doubly-linked-list (dll)
  * forward declaration of dll_t; you can only use dll_t POINTERS
  */
-typedef struct __dll_internal dll_t;
+typedef struct _dll_internal dll_t;
 
 /**
  * @brief function pointer for deleting user data
