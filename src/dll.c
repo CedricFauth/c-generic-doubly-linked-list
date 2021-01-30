@@ -140,6 +140,7 @@ static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     new_node->prev = (*insert_pointer)->prev;
     (*insert_pointer)->prev = new_node;
     *insert_pointer = new_node;
+    list->size++;
 }
 
 /**
@@ -158,6 +159,7 @@ static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
     new_node->next = (*insert_pointer)->next;
     (*insert_pointer)->next = new_node;
     *insert_pointer = new_node;
+    list->size++;
 }
 
 // see dll.h
@@ -171,7 +173,6 @@ void dll_insert(dll_t *list, int pos, void *data) {
     } else {
         _dll_insert_from_begin(list, pos, data);
     }
-    list->size++;
 }
 
 // see dll.h
