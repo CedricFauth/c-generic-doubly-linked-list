@@ -40,8 +40,37 @@ dll_t *dll_new();
  */
 void dll_delete(dll_t *list, delete_data_fun func);
 
+/**
+ * @brief prints the list
+ * 
+ * @param list list to display
+ * @param func function to print a (void *) data item or NULL
+ */
 void dll_display(dll_t *list, display_data_fun func);
 
+/**
+ * @brief inserts data in the list
+ * 
+ * @param list
+ * @param pos position (can be negative); +: count from begin; -: count from end (-1: last index)
+ * @param data data to insert
+ */
 void dll_insert(dll_t *list, int pos, void *data);
+
+/**
+ * @brief inserts data at the beginning
+ * 
+ * @param list 
+ * @param data 
+ */
+void dll_push_front(dll_t *list, void *data);
+
+/**
+ * @brief inserts data at the end
+ * 
+ * @param list 
+ * @param data 
+ */
+void dll_push_back(dll_t *list, void *data);
 
 #endif//_DOUBLY_LINKED_LIST

@@ -1,6 +1,8 @@
 # Generic Doubly Linked List
 
+## Illustration
 ```
+
      +--list--+    
      |+-end--+|       +-node-+         +-node-+
  +-->|| next-||------>| next-|---...-->| next-|----+
@@ -34,9 +36,9 @@
 - [ ] dll_from_array 
 - [x] dll_delete (+ dll_delete_node)
 - [x] dll_display
-- [ ] dll_insert (from both sides)
+- [x] dll_insert (from both sides)
 - [ ] dll_remove (from both sides)
-- [ ] dll_push (from both sides)
+- [x] dll_push (from both sides)
 - [ ] dll_pop (from both sides)
 - [ ] dll_count
 - [ ] dll_index (from both sides)

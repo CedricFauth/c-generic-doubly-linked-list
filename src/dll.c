@@ -46,7 +46,7 @@ dll_t *dll_new() {
  * @param data user data
  * @return new node
  */
-dll_node_t *dll_new_node(void *data) {
+static dll_node_t *_dll_new_node(void *data) {
     dll_node_t *node = malloc(sizeof(dll_node_t));
     if (!node) {
         error("dll_new_node", "Could not allocate enough memory");
@@ -86,6 +86,9 @@ void dll_delete(dll_t *list, delete_data_fun func) {
 }
 
 // see dll.h
+/**
+ * @todo refactor
+ */
 void dll_display(dll_t *list, display_data_fun func) {
     if (!list) {
         printf("null\n");
@@ -121,7 +124,12 @@ void dll_display(dll_t *list, display_data_fun func) {
     printf("\n");
 }
 
-static void _dll_insert_from_begin(dll_t *list, int pos, dll_node_t *new_node) {
+/**
+ * @brief internal function that inserts data (counts from begin)
+ * pos=0 : frist element
+ */
+static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
+    dll_node_t *new_node = _dll_new_node(data);
     dll_node_t *end = &list->end;
     dll_node_t **insert_pointer = &list->end.next;
     while (*insert_pointer != end && pos) {
@@ -134,7 +142,12 @@ static void _dll_insert_from_begin(dll_t *list, int pos, dll_node_t *new_node) {
     *insert_pointer = new_node;
 }
 
-static void _dll_insert_from_end(dll_t *list, int pos, dll_node_t *new_node) {
+/**
+ * @brief internal function that inserts data (counts from end)
+ * pos=0 : last element
+ */
+static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
+    dll_node_t *new_node = _dll_new_node(data);
     dll_node_t *end = &list->end;
     dll_node_t **insert_pointer = &list->end.prev;
     while (*insert_pointer != end && pos) {
@@ -147,50 +160,34 @@ static void _dll_insert_from_end(dll_t *list, int pos, dll_node_t *new_node) {
     *insert_pointer = new_node;
 }
 
+// see dll.h
 void dll_insert(dll_t *list, int pos, void *data) {
     if(!list) {
         error("dll_insert", "list is null");
         return;
     }
-    dll_node_t *new_node = dll_new_node(data);
     if (pos < 0) {
-        _dll_insert_from_end(list, -pos-1, new_node);
+        _dll_insert_from_end(list, -pos-1, data);
     } else {
-        _dll_insert_from_begin(list, pos, new_node);
+        _dll_insert_from_begin(list, pos, data);
     }
     list->size++;
 }
 
-void test_display(void *data) {
-    printf("%d", (char)data);
+// see dll.h
+void dll_push_front(dll_t *list, void *data) {
+    if(!list) {
+        error("dll_push_front", "list is null");
+        return;
+    }
+    _dll_insert_from_begin(list, 0, data);
 }
 
-void test() {
-    dll_t *list = dll_new();
-    dll_node_t *n1 = dll_new_node(NULL);
-    dll_node_t *n2 = dll_new_node(NULL);
-    dll_node_t *n3 = dll_new_node(NULL);
- 
-    dll_display(list, test_display);
-
-    n1->prev = &list->end;
-    n1->next = n2;
-    n1->data = (void *)11;
-
-    n2->prev = n1;
-    n2->next = n3;
-    n2->data = (void *)25;
-
-    n3->next = &list->end;
-    n3->prev = n2;
-    n3->data = (void *)39;
-
-    list->end.next = n1;
-    list->end.prev = n3;
-
-    dll_display(list, test_display);
-    dll_insert(list, -1, (void*)123);
-    dll_display(list, test_display);
-
-    dll_delete(list, NULL);
+// see dll.h
+void dll_push_back(dll_t *list, void *data) {
+    if(!list) {
+        error("dll_push_back", "list is null");
+        return;
+    }
+    _dll_insert_from_end(list, 0, data);
 }
