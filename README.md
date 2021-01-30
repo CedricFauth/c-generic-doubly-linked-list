@@ -1,4 +1,4 @@
-# Universal Doubly Linked List
+# Generic Doubly Linked List
 
 ```
      +--list--+    
