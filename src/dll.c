@@ -128,7 +128,7 @@ void dll_display(dll_t *list, display_data_fun func) {
  * @brief internal function that inserts data (counts from begin)
  * pos=0 : frist element
  */
-static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
+/*static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     dll_node_t *new_node = _dll_new_node(data);
     dll_node_t *end = &list->end;
     dll_node_t **insert_pointer = &list->end.next;
@@ -141,13 +141,27 @@ static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     (*insert_pointer)->prev = new_node;
     *insert_pointer = new_node;
     list->size++;
+}*/
+static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
+    dll_node_t *new_node = _dll_new_node(data);
+    dll_node_t *end = &list->end;
+    dll_node_t *node = list->end.next;
+    while (node != end && pos) {
+        node = node->next;
+        --pos;
+    }
+    new_node->prev = node->prev;
+    new_node->next = node;
+    node->prev->next = new_node;
+    node->prev = new_node;
+    list->size++;
 }
 
 /**
  * @brief internal function that inserts data (counts from end)
  * pos=0 : last element
  */
-static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
+/*static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
     dll_node_t *new_node = _dll_new_node(data);
     dll_node_t *end = &list->end;
     dll_node_t **insert_pointer = &list->end.prev;
@@ -159,6 +173,20 @@ static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
     new_node->next = (*insert_pointer)->next;
     (*insert_pointer)->next = new_node;
     *insert_pointer = new_node;
+    list->size++;
+}*/
+static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
+    dll_node_t *new_node = _dll_new_node(data);
+    dll_node_t *end = &list->end;
+    dll_node_t *node = list->end.prev;
+    while (node != end && pos) {
+        node = node->prev;
+        --pos;
+    }
+    new_node->prev = node;
+    new_node->next = node->next;
+    node->next->prev = new_node;
+    node->next = new_node;
     list->size++;
 }
 
