@@ -1,6 +1,11 @@
 #ifndef _DOUBLY_LINKED_LIST
 #define _DOUBLY_LINKED_LIST
 
+typedef enum mode {
+	VALUE,
+	REFERENCE
+} mode;
+
 /**
  * @brief dll_t is the type of the doubly-linked-list (dll)
  * forward declaration of dll_t; you can only use dll_t POINTERS
@@ -26,7 +31,7 @@ typedef void (*display_data_fun)(void *data);
  * @param data_size size of the data (sizeof(data))
  * @return dll_t* pointer to a list
  */
-dll_t *dll_new(size_t data_size);
+dll_t *dll_new(mode mode, size_t data_size);
 
 /**
  * @brief deletes dll and optionally all user data
@@ -68,5 +73,25 @@ void dll_push_front(dll_t *list, void *data);
  * @param data 
  */
 void dll_push_back(dll_t *list, void *data);
+
+/**
+ * @brief gets size of the list
+ *
+ * @param list
+ * @return int number of nodes in list
+ */
+int dll_length(dll_t *list);
+
+/**
+ * @brief removes item from list
+ * mode=REFERENCE: returns data address; dest may be null
+ * mode=VALUE: copies data to dest location and returns address
+ * 
+ * @param list 
+ * @param pos 
+ * @param dest 
+ * @return void* 
+ */
+void *dll_remove(dll_t *list, int pos, void *dest);
 
 #endif//_DOUBLY_LINKED_LIST

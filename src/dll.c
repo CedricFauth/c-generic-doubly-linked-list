@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <memory.h>
 #include <stddef.h>
+#include <stdint.h>
 #include "dll.h"
 
 typedef struct _dll_node_internal dll_node_t;
@@ -11,7 +12,7 @@ struct _dll_node_internal {
     dll_node_t *prev; // points to previous node
     dll_node_t *next; // points to next node
 
-    unsigned char *data[]; // contains data
+    unsigned char data[]; // contains data
 };
 
 struct _dll_internal {
@@ -19,6 +20,7 @@ struct _dll_internal {
 
     dll_node_t *end; // points to initial element
     size_t data_size; // stores size of data in bytes
+    mode op_mode;
 };
 
 /**
@@ -32,7 +34,11 @@ static void error(char *location, char *msg) {
 }
 
 // see dll.h
-dll_t *dll_new(size_t data_size) {
+dll_t *dll_new(mode mode, size_t data_size) {
+    if (mode == VALUE && data_size <= 0) {
+        error("dll_new", "data_size needs to be larger than 0 in VALUE mode");
+        return NULL;
+    }
     dll_t *list = malloc(sizeof(*list));
     if (!list) {
         error("dll_new", "Could not allocate enough memory");
@@ -48,7 +54,12 @@ dll_t *dll_new(size_t data_size) {
     list->end->prev = list->end;
 
     list->size = 0;
-    list->data_size = data_size;
+    list->op_mode = mode;
+    if (mode == REFERENCE) {
+        list->data_size = sizeof(void *);
+    } else { // VALUE
+        list->data_size = data_size;
+    }
     return list;
 }
 
@@ -59,7 +70,7 @@ dll_t *dll_new(size_t data_size) {
  * @param data data to insert (copy)
  * @return (dll_node_t *) node pointer
  */
-static dll_node_t *_dll_new_node(size_t data_size, void *data) {
+static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
     dll_node_t *node = malloc(sizeof(*node) + data_size);
     if (!node) {
         error("_dll_new_node", "Could not allocate memory");
@@ -67,8 +78,12 @@ static dll_node_t *_dll_new_node(size_t data_size, void *data) {
     }
     node->prev = NULL;
     node->next = NULL;
-    memcpy(node->data, data, data_size);
-
+    if (mode == REFERENCE) {
+        memcpy(node->data, &data, data_size);
+    } else { // VALUE
+        memcpy(node->data, data, data_size);
+    }
+    
     return node;
 }
 
@@ -78,10 +93,16 @@ static dll_node_t *_dll_new_node(size_t data_size, void *data) {
  * @param node node to delete
  * @param func user data delete function
  */
-static void dll_delete_node(dll_node_t *node, delete_data_fun func) {
+static void _dll_delete_node(mode mode, dll_node_t *node, delete_data_fun func) {
     if (!node) return;
     printf("fn ");
-    if (func) (*func)(node->data);
+    if (func) {
+        if (mode == REFERENCE) {
+            (*func)((void *)*(uintptr_t*)node->data);
+        } else { // VALUE
+            (*func)(node->data);
+        }
+    }
     free(node);
 }
 
@@ -94,7 +115,7 @@ void dll_delete(dll_t *list, delete_data_fun func) {
     while (curr != end) {
         tmp = curr;
         curr = curr->next;
-        dll_delete_node(tmp, func);
+        _dll_delete_node(list->op_mode, tmp, func);
     }
     free(end);
     free(list);
@@ -111,13 +132,20 @@ void dll_display(dll_t *list, display_data_fun func) {
     }
     dll_node_t *end = list->end;
     dll_node_t *curr = end->next;
+    mode mode = list->op_mode;
     if (curr == end) {
         printf("empty1\n");
         return;
     }
     while (1) {
         printf("[");
-        if (func) (*func)(curr->data);
+        if (func) {
+            if (mode == REFERENCE) {
+                (*func)((void *)*(uintptr_t *)curr->data);
+            } else { // VALUE
+                (*func)(curr->data);
+            }
+        }
         printf("]");
         if ((curr = curr->next) != end) printf("<=>");
         else break;
@@ -130,7 +158,13 @@ void dll_display(dll_t *list, display_data_fun func) {
     }
     while (1) {
         printf("[");
-        if (func) (*func)(curr->data);
+        if (func) {
+            if (mode == REFERENCE) {
+                (*func)((void *)*(uintptr_t*)curr->data);
+            } else { // VALUE
+                (*func)(curr->data);
+            }
+        }
         printf("]");
         if ((curr = curr->prev) != end) printf("<=>");
         else break;
@@ -158,7 +192,8 @@ void dll_display(dll_t *list, display_data_fun func) {
     list->size++;
 }*/
 static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
-    dll_node_t *new_node = _dll_new_node(list->data_size, data);
+    dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
+    if (!new_node) return;
     dll_node_t *end = list->end;
     dll_node_t *node = list->end->next;
     while (node != end && pos) {
@@ -191,7 +226,8 @@ static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     list->size++;
 }*/
 static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
-    dll_node_t *new_node = _dll_new_node(list->data_size, data);
+    dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
+    if (!new_node) return;
     dll_node_t *end = list->end;
     dll_node_t *node = list->end->prev;
     while (node != end && pos) {
@@ -234,4 +270,37 @@ void dll_push_back(dll_t *list, void *data) {
         return; 
     }
     _dll_insert_from_end(list, 0, data);
+}
+
+// see dll.h
+int dll_length(dll_t *list) {
+    if (!list) {
+        error("dll_count", "list is null");
+        return -1;
+    }
+    return list->size;
+}
+
+void * _dll_remove_from_end(dll_t *list, int pos) {
+    return NULL;
+}
+
+void * _dll_remove_from_begin(dll_t *list, int pos) {
+    return NULL;
+}
+
+void *dll_remove(dll_t *list, int pos, void *dest) {
+    if(!list) {
+        error("dll_remove", "list is null");
+        return NULL;
+    }
+    if(!(-list->size-1 < pos < list->size)) {
+        error("dll_remove", "index out of range");
+        return NULL;
+    }
+    if (pos < 0) {
+        return _dll_remove_from_end(list, -pos-1);
+    } else {
+        return _dll_remove_from_begin(list, pos);
+    }
 }
