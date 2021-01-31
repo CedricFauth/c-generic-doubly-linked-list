@@ -11,7 +11,7 @@ struct _dll_node_internal {
     dll_node_t *prev; // points to previous node
     dll_node_t *next; // points to next node
 
-    uint8_t data[]; // contains data
+    char data[]; // contains data
 };
 
 struct _dll_internal {
@@ -57,8 +57,8 @@ dll_t *dll_new(size_t data_size) {
  * @return new node
  */
 static dll_node_t *_dll_new_node(size_t data_size, void *data) {
-    dll_node_t *node = malloc(sizeof(*node) + sizeof(*node->data) * data_size);
-    printf("%lu ", sizeof(dll_node_t) + sizeof(*node->data) * data_size);
+    dll_node_t *node = malloc(sizeof(*node) + data_size);
+    printf("%lu ", sizeof(dll_node_t) + data_size);
     if (!node) {
         error("dll_new_node", "Could not allocate enough memory");
         return NULL;
