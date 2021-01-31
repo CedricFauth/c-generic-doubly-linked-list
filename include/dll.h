@@ -24,7 +24,7 @@ typedef void (*display_data_fun)(void *data);
  *
  * @return dll_t* pointer to a list
  */
-dll_t *dll_new();
+dll_t *dll_new(size_t data_size);
 
 /**
  * @brief deletes dll and optionally all user data
