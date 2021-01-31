@@ -11,13 +11,14 @@ struct _dll_node_internal {
     dll_node_t *prev; // points to previous node
     dll_node_t *next; // points to next node
 
-    char data[]; // contains data
+    unsigned char *data[]; // contains data
 };
 
 struct _dll_internal {
-    dll_node_t *end;
-    size_t size;
-    size_t data_size;
+    size_t size; // number of elements
+
+    dll_node_t *end; // points to initial element
+    size_t data_size; // stores size of data in bytes
 };
 
 /**
@@ -45,29 +46,29 @@ dll_t *dll_new(size_t data_size) {
     }
     list->end->next = list->end;
     list->end->prev = list->end;
+
     list->size = 0;
     list->data_size = data_size;
     return list;
 }
 
 /**
- * @brief allocates new node containing data
- *
- * @param data user data
- * @return new node
+ * @brief internal function; allocates new node and copying data
+ * 
+ * @param data_size size of the data in bytes
+ * @param data data to insert (copy)
+ * @return (dll_node_t *) node pointer
  */
 static dll_node_t *_dll_new_node(size_t data_size, void *data) {
     dll_node_t *node = malloc(sizeof(*node) + data_size);
-    printf("%lu ", sizeof(dll_node_t) + data_size);
     if (!node) {
-        error("dll_new_node", "Could not allocate enough memory");
+        error("_dll_new_node", "Could not allocate memory");
         return NULL;
     }
     node->prev = NULL;
     node->next = NULL;
-    memcpy((void *)node->data, data, data_size);
-    //printf("%d", (int)data);
-    //node->data = data;
+    memcpy(node->data, data, data_size);
+
     return node;
 }
 

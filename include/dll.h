@@ -21,7 +21,9 @@ typedef void (*display_data_fun)(void *data);
 
 /**
  * @brief creates new doubly-linked-list (dll)
- *
+ * 
+ * @param m mode: copy the data or just store the reference pointer
+ * @param data_size size of the data (sizeof(data))
  * @return dll_t* pointer to a list
  */
 dll_t *dll_new(size_t data_size);
