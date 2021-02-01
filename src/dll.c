@@ -294,7 +294,7 @@ void *dll_remove(dll_t *list, int pos, void *dest) {
         error("dll_remove", "list is null");
         return NULL;
     }
-    if(!(-list->size-1 < pos < list->size)) {
+    if(!(-list->size-1 < pos) || !(pos < list->size)) {
         error("dll_remove", "index out of range");
         return NULL;
     }
