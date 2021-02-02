@@ -35,7 +35,7 @@
 - [x] dll_delete (+ dll_delete_node)
 - [x] dll_display
 - [x] dll_insert (from both sides)
-- [ ] dll_remove (from both sides)
+- [x] dll_remove (from both sides)
 - [x] dll_push (from both sides)
 - [ ] dll_pop (from both sides)
 - [x] dll_length

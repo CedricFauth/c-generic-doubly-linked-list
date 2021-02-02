@@ -16,7 +16,7 @@ struct _dll_node_internal {
 };
 
 struct _dll_internal {
-    size_t size; // number of elements
+    ssize_t size; // number of elements
 
     dll_node_t *end; // points to initial element
     size_t data_size; // stores size of data in bytes
@@ -30,7 +30,7 @@ struct _dll_internal {
  * @param msg description of the error
  */
 static void error(char *location, char *msg) {
-    fprintf(stderr, "Error [%s] : %s.", location, msg);
+    fprintf(stderr, "Error [%s] : %s.\n", location, msg);
 }
 
 // see dll.h
@@ -93,17 +93,46 @@ static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
  * @param node node to delete
  * @param func user data delete function
  */
-static void _dll_delete_node(mode mode, dll_node_t *node, delete_data_fun func) {
-    if (!node) return;
+static void _dll_delete_node(mode m, dll_node_t *node, delete_data_fun func) {
+    if (!node) {
+        error("_dll_delete_node", "node is null");
+        return;
+    }
     printf("fn ");
     if (func) {
-        if (mode == REFERENCE) {
-            (*func)((void *)*(uintptr_t*)node->data);
+        if (m == REFERENCE) {
+            (*func)((void *)*(uintptr_t *)node->data);
         } else { // VALUE
             (*func)(node->data);
         }
     }
     free(node);
+}
+
+/**
+ * @brief gets called when removing a node; just returns node data
+ * 
+ * @param m 
+ * @param node 
+ * @return void* 
+ */
+static void *_dll_remove_node(dll_t *list, dll_node_t *node, void *dest) {
+    if (!list || !node) {
+        error("_dll_remove_node", "node is null");
+        return NULL;
+    }
+    mode m = list->op_mode;
+    if (m == REFERENCE) {
+        void *ref = (void *)*(uintptr_t *)node->data;
+        _dll_delete_node(m, node, NULL); // TODO remove != delete fun
+        return ref;
+    } else {
+        if (dest) {
+            memcpy(dest, node->data, list->data_size);
+        }
+        _dll_delete_node(m, node, NULL); // TODO remove != delete fun
+        return dest;
+    }
 }
 
 // see dll.h
@@ -192,6 +221,14 @@ void dll_display(dll_t *list, display_data_fun func) {
     list->size++;
 }*/
 static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
+    if(!list) {
+        error("dll_insert", "list is null");
+        return;
+    }
+    if(pos > list->size || pos < 0) {
+        error("dll_insert", "index out of range");
+        return;
+    }
     dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
     if (!new_node) return;
     dll_node_t *end = list->end;
@@ -211,21 +248,15 @@ static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
  * @brief internal function that inserts data (counts from end)
  * pos=0 : last element
  */
-/*static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
-    dll_node_t *new_node = _dll_new_node(data);
-    dll_node_t *end = &list->end;
-    dll_node_t **insert_pointer = &list->end.prev;
-    while (*insert_pointer != end && pos) {
-        insert_pointer = &(*insert_pointer)->prev;
-        --pos;
-    }
-    new_node->prev = (*insert_pointer);
-    new_node->next = (*insert_pointer)->next;
-    (*insert_pointer)->next = new_node;
-    *insert_pointer = new_node;
-    list->size++;
-}*/
 static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
+    if(!list) {
+        error("dll_insert", "list is null");
+        return;
+    }
+    if(pos > list->size || pos < 0) {
+        error("dll_insert", "index out of range");
+        return;
+    }
     dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
     if (!new_node) return;
     dll_node_t *end = list->end;
@@ -243,10 +274,6 @@ static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
 
 // see dll.h
 void dll_insert(dll_t *list, int pos, void *data) {
-    if(!list) {
-        error("dll_insert", "list is null");
-        return;
-    }
     if (pos < 0) {
         _dll_insert_from_end(list, -pos-1, data);
     } else {
@@ -281,26 +308,56 @@ int dll_length(dll_t *list) {
     return list->size;
 }
 
-void * _dll_remove_from_end(dll_t *list, int pos) {
-    return NULL;
-}
-
-void * _dll_remove_from_begin(dll_t *list, int pos) {
-    return NULL;
-}
-
-void *dll_remove(dll_t *list, int pos, void *dest) {
+static void *_dll_remove_from_end(dll_t *list, int pos, void *dest) {
     if(!list) {
         error("dll_remove", "list is null");
         return NULL;
     }
-    if(!(-list->size-1 < pos) || !(pos < list->size)) {
+    if(pos >= list->size || pos < 0) {
         error("dll_remove", "index out of range");
         return NULL;
     }
+    dll_node_t *end = list->end;
+    dll_node_t *node = end->prev;
+    while (pos) {
+        node = node->prev;
+        --pos;
+    }
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->next = NULL;
+    node->prev = NULL;
+    list->size--;
+    return _dll_remove_node(list, node, dest);
+}
+
+static void *_dll_remove_from_begin(dll_t *list, int pos, void *dest) {
+    if(!list) {
+        error("dll_remove", "list is null");
+        return NULL;
+    }
+    if(pos >= list->size || pos < 0) {
+        error("dll_remove", "index out of range");
+        return NULL;
+    }
+    dll_node_t *end = list->end;
+    dll_node_t *node = end->next;
+    while (pos) {
+        node = node->next;
+        --pos;
+    }
+    node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->next = NULL;
+    node->prev = NULL;
+    list->size--;
+    return _dll_remove_node(list, node, dest);
+}
+
+void *dll_remove(dll_t *list, int pos, void *dest) {
     if (pos < 0) {
-        return _dll_remove_from_end(list, -pos-1);
+        return _dll_remove_from_end(list, -pos-1, dest);
     } else {
-        return _dll_remove_from_begin(list, pos);
+        return _dll_remove_from_begin(list, pos, dest);
     }
 }

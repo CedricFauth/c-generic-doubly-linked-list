@@ -14,7 +14,8 @@ void test_display(void *data) {
 
 int main(int argc, char const *argv[]) {
 
-    dll_t *list = dll_new(REFERENCE, 0);
+    dll_t *list = dll_new(VALUE, sizeof(tmp));
+    //dll_t *list = dll_new(REFERENCE, 0);
 
     dll_display(list, test_display);
 
@@ -22,6 +23,7 @@ int main(int argc, char const *argv[]) {
     t.i = 123;
     t.d = 1.23;
     dll_push_back(list, &t);dll_display(list, test_display);
+    //printf("%d\n", dll_length(list));
 
     t.i = 11;
     t.d = 1.1;
@@ -29,7 +31,14 @@ int main(int argc, char const *argv[]) {
 
     t.i = 99;
     t.d = 9.9;
-    dll_insert(list, -2, &t);dll_display(list, test_display);
+    dll_insert(list, -1, &t);dll_display(list, test_display);
+
+    printf("delete ");
+    tmp *d = &t;
+    printf("ret: %p\n", (void*)(d = dll_remove(list, -2, d)));
+    test_display(d);
+    printf("\n");
+    dll_display(list, test_display);
 
     t.i = 0;
     t.d = 0.0;
