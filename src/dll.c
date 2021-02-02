@@ -80,7 +80,7 @@ static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
     node->next = NULL;
     if (mode == REFERENCE) {
         //memcpy(node->data, &data, data_size);
-        *(uintptr_t*)node->data = (uintptr_t)data;
+        *(void **)node->data = data;
         //*(void **)node->data = data;
     } else { // VALUE
         memcpy(node->data, data, data_size);
@@ -103,7 +103,7 @@ static void _dll_delete_node(mode m, dll_node_t *node, delete_data_fun func) {
     printf("fn ");
     if (func) {
         if (m == REFERENCE) {
-            (*func)((void *)*(uintptr_t *)node->data);
+            (*func)(*(void **)node->data);
         } else { // VALUE
             (*func)(node->data);
         }
@@ -125,7 +125,7 @@ static void *_dll_remove_node(dll_t *list, dll_node_t *node, void *dest) {
     }
     mode m = list->op_mode;
     if (m == REFERENCE) {
-        void *ref = (void *)*(uintptr_t *)node->data;
+        void *ref = *(void **)node->data;
         _dll_delete_node(m, node, NULL); // TODO remove != delete fun
         return ref;
     } else {
@@ -172,7 +172,7 @@ void dll_display(dll_t *list, display_data_fun func) {
         printf("[");
         if (func) {
             if (mode == REFERENCE) {
-                (*func)((void *)*(uintptr_t *)curr->data);
+                (*func)(*(void **)curr->data);
             } else { // VALUE
                 (*func)(curr->data);
             }
@@ -191,7 +191,7 @@ void dll_display(dll_t *list, display_data_fun func) {
         printf("[");
         if (func) {
             if (mode == REFERENCE) {
-                (*func)((void *)*(uintptr_t*)curr->data);
+                (*func)(*(void **)curr->data);
             } else { // VALUE
                 (*func)(curr->data);
             }
