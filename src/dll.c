@@ -79,7 +79,9 @@ static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
     node->prev = NULL;
     node->next = NULL;
     if (mode == REFERENCE) {
-        memcpy(node->data, &data, data_size);
+        //memcpy(node->data, &data, data_size);
+        *(uintptr_t*)node->data = (uintptr_t)data;
+        //*(void **)node->data = data;
     } else { // VALUE
         memcpy(node->data, data, data_size);
     }
