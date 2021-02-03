@@ -14,6 +14,21 @@
  +--------------------------<----------------------+
 ```
 
+## Implemented Functions
+|Name|Worst Case|Description|
+|-|-|-|
+| dll_new | O(1) | Creates new list |
+| dll_delete | O(n) | Deletes list |
+| dll_display | O(n) | Prints the list |
+| dll_insert | O(n) | Inserts data in list |
+| dll_remove | O(n) | Removes and returns data from list |
+| dll_push | O(1) | Adds frist/last item |
+| dll_pop | O(1) | Removes first/last item |
+| dll_size | O(1) | Returns size |
+| dll_peek | O(n) | Looks up data in list |
+| dll_reverse | O(n) | Reverses list |
+| dll_clear| O(n) | Deletes all data from list |
+
 ## Conventions
 - write smart and clean code - but readable
 - refactor your code
@@ -38,7 +53,7 @@
 - [x] dll_remove (from both sides)
 - [x] dll_push (from both sides)
 - [x] dll_pop (from both sides)
-- [x] dll_length
+- [x] dll_size
 - [x] dll_peek (from both sides)
 - [x] dll_reverse
 - [ ] dll_extend

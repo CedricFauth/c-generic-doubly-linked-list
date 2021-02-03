@@ -14,8 +14,8 @@ void test_display(void *data) {
 
 int main(int argc, char const *argv[]) {
 
-    //dll_t *list = dll_new(VALUE, sizeof(tmp));
-    dll_t *list = dll_new(REFERENCE, 0);
+    dll_t *list = dll_new(VALUE, sizeof(tmp));
+    //dll_t *list = dll_new(REFERENCE, 0);
 
     dll_display(list, test_display);
 
@@ -40,7 +40,7 @@ int main(int argc, char const *argv[]) {
     dll_reverse(list);
     dll_display(list, test_display);
 
-    printf("%d\n", dll_length(list));
+    printf("%d\n", dll_size(list));
 
     dll_clear(list); dll_display(list, test_display);
     dll_push_front(list, &t);dll_display(list, test_display);

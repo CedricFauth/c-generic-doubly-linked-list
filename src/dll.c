@@ -302,7 +302,7 @@ void dll_push_back(dll_t *list, void *data) {
 }
 
 // see dll.h
-int dll_length(dll_t *list) {
+int dll_size(dll_t *list) {
     if (!list) {
         error("dll_count", "list is null");
         return -1;

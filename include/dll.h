@@ -80,7 +80,7 @@ void dll_push_back(dll_t *list, void *data);
  * @param list
  * @return int number of nodes in list
  */
-int dll_length(dll_t *list);
+int dll_size(dll_t *list);
 
 /**
  * @brief removes item from list
