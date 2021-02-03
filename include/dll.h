@@ -34,6 +34,17 @@ typedef void (*display_data_fun)(void *data);
 dll_t *dll_new(op_mode mode, size_t data_size);
 
 /**
+ * @brief takes data from an array and creates a list
+ * if array consists of pointers: the pointers will be referenced/copied
+ * @param array array of values that will be referenced or copied
+ * @param len number of elements
+ * @param mode copy(value) or reference array entries
+ * @param elem_size size of elements
+ * @return dll_t* 
+ */
+dll_t *dll_from_value_array(void *array, int len, op_mode mode, size_t elem_size);
+
+/**
  * @brief deletes dll and optionally all user data
  *
  * @param list list to delete

@@ -12,8 +12,22 @@ void test_display(void *data) {
     printf("%d, %.2f", t->i, t->d);
 }
 
+void a_display(void *v) {
+    int val = *(int *)v;
+    printf("%d", val);
+}
+
 int main(int argc, char const *argv[]) {
 
+    int arr[5] = {1,2,3,4,5};
+
+    dll_t *list_a = dll_from_value_array(arr, 5, REFERENCE, sizeof(*arr));
+    dll_display(list_a, a_display);
+    arr[1] = 99;
+    dll_display(list_a, a_display);
+    dll_delete(list_a, NULL);
+
+    /*
     dll_t *list = dll_new(VALUE, sizeof(tmp));
     //dll_t *list = dll_new(REFERENCE, 0);
 
@@ -48,4 +62,5 @@ int main(int argc, char const *argv[]) {
 
 
     dll_delete(list, NULL);
+    */
 }

@@ -46,7 +46,7 @@
 - [x] structs for list and nodes
 ### Standard Functions
 - [x] dll_new (+ dll_new_node)
-- [ ] dll_from_array 
+- [x] dll_from_array 
 - [x] dll_delete (+ dll_delete_node)
 - [x] dll_display
 - [x] dll_insert (from both sides)

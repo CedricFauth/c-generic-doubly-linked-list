@@ -63,6 +63,17 @@ dll_t *dll_new(op_mode mode, size_t data_size) {
     return list;
 }
 
+dll_t *dll_from_value_array(void *array, int len, op_mode mode, size_t elem_size) {
+    if (!array || !len) {
+        error("dll_from_array", "array not valid");
+    }
+    dll_t *list = dll_new(mode, elem_size);
+    unsigned char *base = (unsigned char*)array;
+    for (int i = 0; i < len; ++i)
+        dll_push_back(list, base + i * elem_size);
+    return list;
+}
+
 /**
  * @brief internal function; allocates new node and copying data
  * 
@@ -233,9 +244,8 @@ static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     }
     dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
     if (!new_node) return;
-    dll_node_t *end = list->end;
     dll_node_t *node = list->end->next;
-    while (node != end && pos) {
+    while (pos) {
         node = node->next;
         --pos;
     }
@@ -261,9 +271,8 @@ static void _dll_insert_from_end(dll_t *list, int pos, void *data) {
     }
     dll_node_t *new_node = _dll_new_node(list->op_mode, list->data_size, data);
     if (!new_node) return;
-    dll_node_t *end = list->end;
     dll_node_t *node = list->end->prev;
-    while (node != end && pos) {
+    while (pos) {
         node = node->prev;
         --pos;
     }
@@ -374,7 +383,7 @@ void *dll_pop_front(dll_t *list, void *dest){
     return _dll_remove_from_begin(list, 0, dest);
 }
 
-void *_dll_peek_from_end(dll_t *list, int pos) {
+static void *_dll_peek_from_end(dll_t *list, int pos) {
     if(!list) {
         error("dll_peek", "list is null");
         return NULL;
@@ -396,7 +405,7 @@ void *_dll_peek_from_end(dll_t *list, int pos) {
     }
 }
 
-void *_dll_peek_from_begin(dll_t *list, int pos) {
+static void *_dll_peek_from_begin(dll_t *list, int pos) {
     if(!list) {
         error("dll_peek", "list is null");
         return NULL;
