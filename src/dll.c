@@ -20,7 +20,7 @@ struct _dll_internal {
 
     dll_node_t *end; // points to initial element
     size_t data_size; // stores size of data in bytes
-    mode op_mode;
+    op_mode op_mode;
 };
 
 /**
@@ -34,7 +34,7 @@ static void error(char *location, char *msg) {
 }
 
 // see dll.h
-dll_t *dll_new(mode mode, size_t data_size) {
+dll_t *dll_new(op_mode mode, size_t data_size) {
     if (mode == VALUE && data_size <= 0) {
         error("dll_new", "data_size needs to be larger than 0 in VALUE mode");
         return NULL;
@@ -70,7 +70,7 @@ dll_t *dll_new(mode mode, size_t data_size) {
  * @param data data to insert (copy)
  * @return (dll_node_t *) node pointer
  */
-static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
+static dll_node_t *_dll_new_node(op_mode mode, size_t data_size, void *data) {
     dll_node_t *node = malloc(sizeof(*node) + data_size);
     if (!node) {
         error("_dll_new_node", "Could not allocate memory");
@@ -95,7 +95,7 @@ static dll_node_t *_dll_new_node(mode mode, size_t data_size, void *data) {
  * @param node node to delete
  * @param func user data delete function
  */
-static void _dll_delete_node(mode m, dll_node_t *node, delete_data_fun func) {
+static void _dll_delete_node(op_mode m, dll_node_t *node, delete_data_fun func) {
     if (!node) {
         error("_dll_delete_node", "node is null");
         return;
@@ -112,7 +112,7 @@ static void _dll_delete_node(mode m, dll_node_t *node, delete_data_fun func) {
 }
 
 /**
- * @brief gets called when removing a node; just returns node data
+ * @brief gets called when a node gets removed from the list and returns data
  * 
  * @param m 
  * @param node 
@@ -123,7 +123,7 @@ static void *_dll_remove_node(dll_t *list, dll_node_t *node, void *dest) {
         error("_dll_remove_node", "node is null");
         return NULL;
     }
-    mode m = list->op_mode;
+    op_mode m = list->op_mode;
     if (m == REFERENCE) {
         void *ref = *(void **)node->data;
         _dll_delete_node(m, node, NULL); // TODO remove != delete fun
@@ -163,7 +163,7 @@ void dll_display(dll_t *list, display_data_fun func) {
     }
     dll_node_t *end = list->end;
     dll_node_t *curr = end->next;
-    mode mode = list->op_mode;
+    op_mode mode = list->op_mode;
     if (curr == end) {
         printf("empty1\n");
         return;
@@ -310,6 +310,7 @@ int dll_length(dll_t *list) {
     return list->size;
 }
 
+// internal function
 static void *_dll_remove_from_end(dll_t *list, int pos, void *dest) {
     if(!list) {
         error("dll_remove", "list is null");
@@ -333,6 +334,7 @@ static void *_dll_remove_from_end(dll_t *list, int pos, void *dest) {
     return _dll_remove_node(list, node, dest);
 }
 
+// interal function
 static void *_dll_remove_from_begin(dll_t *list, int pos, void *dest) {
     if(!list) {
         error("dll_remove", "list is null");
@@ -361,5 +363,66 @@ void *dll_remove(dll_t *list, int pos, void *dest) {
         return _dll_remove_from_end(list, -pos-1, dest);
     } else {
         return _dll_remove_from_begin(list, pos, dest);
+    }
+}
+
+void *dll_pop_back(dll_t *list, void *dest){
+    return _dll_remove_from_end(list, 0, dest);
+} 
+
+void *dll_pop_front(dll_t *list, void *dest){
+    return _dll_remove_from_begin(list, 0, dest);
+}
+
+void *_dll_peek_from_end(dll_t *list, int pos) {
+    if(!list) {
+        error("dll_peek", "list is null");
+        return NULL;
+    }
+    if(pos >= list->size || pos < 0) {
+        error("dll_peek", "index out of range");
+        return NULL;
+    }
+    dll_node_t *end = list->end;
+    dll_node_t *node = end->prev;
+    while (pos) {
+        node = node->prev;
+        --pos;
+    }
+    if (list->op_mode == REFERENCE) {
+        return *(void **)node->data;
+    } else {
+        return node->data;
+    }
+}
+
+void *_dll_peek_from_begin(dll_t *list, int pos) {
+    if(!list) {
+        error("dll_peek", "list is null");
+        return NULL;
+    }
+    if(pos >= list->size || pos < 0) {
+        error("dll_peek", "index out of range");
+        return NULL;
+    }
+    dll_node_t *end = list->end;
+    dll_node_t *node = end->next;
+    while (pos) {
+        node = node->next;
+        --pos;
+    }
+    if (list->op_mode == REFERENCE) {
+        return *(void **)node->data;
+    } else {
+        return node->data;
+    }
+}
+
+// see dll.h
+void *dll_peek(dll_t *list, int pos) {
+    if (pos < 0) {
+        return _dll_peek_from_end(list, -pos-1);
+    } else {
+        return _dll_peek_from_begin(list, pos);
     }
 }

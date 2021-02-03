@@ -14,19 +14,17 @@ void test_display(void *data) {
 
 int main(int argc, char const *argv[]) {
 
-    dll_t *list = dll_new(VALUE, sizeof(tmp));
-    //dll_t *list = dll_new(REFERENCE, 0);
+    //dll_t *list = dll_new(VALUE, sizeof(tmp));
+    dll_t *list = dll_new(REFERENCE, 0);
 
     dll_display(list, test_display);
 
     tmp t0 = {123, 1.23};
-    tmp t1 = {11, 1.1};
+    //tmp t1 = {11, 1.1};
     tmp t2 = {99, 9.9};
 
     dll_push_back(list, &t0);dll_display(list, test_display);
     //printf("%d\n", dll_length(list));
-
-    dll_insert(list, 0, &t1);dll_display(list, test_display);
 
     dll_insert(list, -1, &t2);dll_display(list, test_display);
 
@@ -45,8 +43,15 @@ int main(int argc, char const *argv[]) {
     t.i = 1;
     t.d = 1.11;
     dll_display(list, test_display);
-
     printf("%d\n", dll_length(list));
+
+    d = dll_peek(list, 1);
+    test_display(d);
+    d->i = 9876;
+    d = dll_peek(list, 0);
+    test_display(d);
+    d = dll_peek(list, -1);
+    test_display(d);
 
     dll_delete(list, NULL);
 }

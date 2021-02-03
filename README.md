@@ -37,9 +37,9 @@
 - [x] dll_insert (from both sides)
 - [x] dll_remove (from both sides)
 - [x] dll_push (from both sides)
-- [ ] dll_pop (from both sides)
+- [x] dll_pop (from both sides)
 - [x] dll_length
-- [ ] dll_peek (from both sides)
+- [x] dll_peek (from both sides)
 - [ ] dll_reverse
 - [ ] dll_extend
 - [ ] dll_clear

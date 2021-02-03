@@ -4,7 +4,7 @@
 typedef enum mode {
 	VALUE,
 	REFERENCE
-} mode;
+} op_mode;
 
 /**
  * @brief dll_t is the type of the doubly-linked-list (dll)
@@ -27,11 +27,11 @@ typedef void (*display_data_fun)(void *data);
 /**
  * @brief creates new doubly-linked-list (dll)
  * 
- * @param m mode: copy the data or just store the reference pointer
- * @param data_size size of the data (sizeof(data))
+ * @param mode value: copies data; reference: stores the reference pointer
+ * @param data_size value: size of the data; reference: don't care
  * @return dll_t* pointer to a list
  */
-dll_t *dll_new(mode mode, size_t data_size);
+dll_t *dll_new(op_mode mode, size_t data_size);
 
 /**
  * @brief deletes dll and optionally all user data
@@ -84,14 +84,44 @@ int dll_length(dll_t *list);
 
 /**
  * @brief removes item from list
- * mode=REFERENCE: returns data address; dest may be null
- * mode=VALUE: copies data to dest location and returns address
+ * mode=REFERENCE returns data address; dest may be null
+ * mode=VALUE copies data to dest location and returns address
+ *             IMPORTANT dest 'buffer' needs to be large enough 
+ *             to hold user data; 
+ *             if dest=NULL data gets deleted and returns NULL
  * 
  * @param list 
- * @param pos 
- * @param dest 
- * @return void* 
+ * @param pos index of data
+ * @param dest see description
+ * @return pointer to data
  */
 void *dll_remove(dll_t *list, int pos, void *dest);
+
+/**
+ * @brief pops data at the end of the list and returns it
+ * 
+ * @param list 
+ * @param dest see dll_remove
+ * @return void* 
+ */
+void *dll_pop_back(dll_t *list, void *dest);
+
+/**
+ * @brief pops data at the start of the list and returns it
+ * 
+ * @param list 
+ * @param dest see dll_remove
+ * @return void* 
+ */
+void *dll_pop_front(dll_t *list, void *dest);
+
+/**
+ * @brief peeks inside data in the list
+ * 
+ * @param list 
+ * @param pos (may be negative)
+ * @return reference to user data in list
+ */
+void *dll_peek(dll_t *list, int pos);
 
 #endif//_DOUBLY_LINKED_LIST
