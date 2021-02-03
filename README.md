@@ -65,9 +65,8 @@
 - ( [ ] dll_filter (result: new list) )
 - ( [ ] dll_map (result: new list) )
 ### Iterators
-- [ ] dll_iter_begin
-- [ ] dll_iter_end
-- [ ] dll_has_next
-- [ ] dll_has_prev
-- [ ] dll_next
-- [ ] dll_prev
+- [x] dll_iter
+- [x] dlli_has_next
+- [x] dlli_has_prev
+- [x] dlli_next
+- [x] dlli_prev
