@@ -29,6 +29,12 @@
 | dll_peek | O(n) | Looks up data in list |
 | dll_reverse | O(n) | Reverses list |
 | dll_clear| O(n) | Deletes all data from list |
+| dll_iter | O(1) | creates iterator | 
+| dlli_delete | O(1) | deletes iterator | 
+| dlli_has_next | O(1) | checks if next data exists | 
+| dlli_has_prev | O(1) | checks if previous data exists | 
+| dlli_next | O(1) | returns next data | 
+| dlli_prev | O(1) | returns previous data | 
 
 ## Conventions
 - write smart and clean code - but readable

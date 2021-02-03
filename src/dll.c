@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <memory.h>
-#include <stddef.h>
 #include <stdint.h>
 #include "dll.h"
 
@@ -220,24 +219,6 @@ void dll_display(dll_t *list, display_data_fun func) {
     printf("\n");
 }
 
-/**
- * @brief internal function that inserts data (counts from begin)
- * pos=0 : frist element
- */
-/*static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
-    dll_node_t *new_node = _dll_new_node(data);
-    dll_node_t *end = &list->end;
-    dll_node_t **insert_pointer = &list->end.next;
-    while (*insert_pointer != end && pos) {
-        insert_pointer = &(*insert_pointer)->next;
-        --pos;
-    }
-    new_node->next = (*insert_pointer);
-    new_node->prev = (*insert_pointer)->prev;
-    (*insert_pointer)->prev = new_node;
-    *insert_pointer = new_node;
-    list->size++;
-}*/
 static void _dll_insert_from_begin(dll_t *list, int pos, void *data) {
     if(!list) {
         error("dll_insert", "list is null");
@@ -560,4 +541,96 @@ void *dlli_prev(dlli_t *iter) {
         }
     }
     return NULL;
+}
+
+static void _debug_print(dll_node_t *node) {
+    printf("{ ");
+    while (node) {
+        printf("%d ", *(int *)node->data);
+        node = node->next;
+    }
+    printf("}\n");
+}
+
+static void _append(dll_node_t **start, dll_node_t **stop, dll_node_t *n) {
+    n->next = NULL;
+    n->prev = NULL;
+    if (!*start) {
+        *start = n;
+        *stop = n;
+        return;
+    }
+    (*stop)->next = n;
+    n->prev = *stop;
+    *stop = n;
+}
+
+static dll_node_t *_merge(dll_node_t *l, dll_node_t *r, cmp c, op_mode m) {
+    dll_node_t *start = NULL;
+    dll_node_t *end = NULL;
+    while(l || r) {
+        dll_node_t *curr_l = l;
+        dll_node_t *curr_r = r;
+        if (l && r) {
+            int res;
+            if (m == REFERENCE) res = (*c)(*(void **)curr_l->data, *(void **)curr_r->data);
+            else res = (*c)(curr_l->data, curr_r->data);
+            if (res < 0) {
+                r = r->next;
+                _append(&start, &end, curr_r);
+            } else {
+                l = l->next;
+                _append(&start, &end, curr_l);
+            }
+        } else if (l) {
+            l = l->next;
+            _append(&start, &end, curr_l);
+        } else if (r) {
+            r = r->next;
+            _append(&start, &end, curr_r);
+        }
+    }
+
+    _debug_print(start);
+    return start;
+}
+
+static dll_node_t *_mergesort(dll_node_t *nodes, int size, cmp c, op_mode m) {
+    //_debug_print(nodes);
+    if (size < 2) return nodes;
+    int l_size = size/2;
+    int r_size = size - l_size;
+    int i = l_size;
+    dll_node_t *l = nodes;
+    dll_node_t *r = l;
+    while (i) {
+        r = r->next;
+        --i;
+    }
+    r->prev->next = NULL;
+    r->prev = NULL;
+    l = _mergesort(l, l_size, c, m);
+    r = _mergesort(r, r_size, c, m);
+
+    return _merge(l, r, c, m);
+}
+
+void dll_sort(dll_t *list, cmp c) {
+    if (!list) {
+        error("dll_sort", "list is null");
+        return;
+    }
+    if (list->end->next == list->end) return;
+
+    dll_node_t *nodes = list->end->next;
+    list->end->next->prev = NULL;
+    list->end->prev->next = NULL;
+    
+    nodes = _mergesort(nodes, list->size, c, list->op_mode);
+
+    list->end->next = nodes;
+    nodes->prev = list->end;
+    while(nodes->next) nodes = nodes->next;
+    list->end->prev = nodes;
+    nodes->next = list->end;
 }

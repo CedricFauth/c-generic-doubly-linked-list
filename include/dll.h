@@ -30,7 +30,7 @@ typedef void (*display_data_fun)(void *data);
 
 typedef void (*foreach_fun)(int index, void *data, void *usr);
 
-typedef void *(*reduce_fun)(void *data, void *acc);
+typedef int (*cmp)(void *dl, void *dr);
 
 /**
  * @brief creates new doubly-linked-list (dll)
@@ -170,5 +170,7 @@ bool dlli_has_prev(dlli_t *iter);
 void *dlli_next(dlli_t *iter);
 
 void *dlli_prev(dlli_t *iter);
+
+void dll_sort(dll_t *list, cmp c);
 
 #endif//_DOUBLY_LINKED_LIST

@@ -22,25 +22,46 @@ void a_sum(int index, void *curr, void *acc) {
     *(int *)acc += *(int *)curr;
 }
 
+int a_cmp(void *dl, void *dr) {
+    int l = *(int *)dl;
+    int r = *(int *)dr;
+
+    printf("l=%d, r=%d\n", l, r);
+
+    if (l > r) {
+        return -1;
+    }
+    return 1;
+}
+
 int main(int argc, char const *argv[]) {
 
-    int arr[5] = {1,2,3,4,5};
+    int arr[5] = {4,2,5,3,1};
     dll_t *list_a = dll_from_value_array(arr, 5, VALUE, sizeof(*arr));
 
-    // foreach
+    /*
     int s = 0;
-    // [1]<=>[2]<=>[3]<=>[4]<=>[5]
     dll_foreach(list_a, a_sum, &s);
     printf("\nsum: %d\n", s);
     dll_display(list_a, a_display);
 
-    // iterators
     s = 0;
     dlli_t *iter = dll_iter(list_a);
     while(dlli_has_next(iter)) {
         s += *(int *)dlli_next(iter);
     }
-    printf("sum: %d\n", s);
+    printf("sum: %d\n%d\n", s, dll_size(list_a));
+    */
+    dll_display(list_a, a_display);
+    dll_sort(list_a, a_cmp);
+    dll_display(list_a, a_display);
+
+    int t0 = 123;
+
+    dll_push_front(list_a, &t0);
+    dll_display(list_a, a_display);
+    dll_sort(list_a, a_cmp);
+    dll_display(list_a, a_display);
 
     dll_delete(list_a, NULL);
 
