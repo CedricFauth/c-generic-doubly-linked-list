@@ -17,13 +17,20 @@ void a_display(void *v) {
     printf("%d", val);
 }
 
+void a_sum(int index, void *curr, void *acc) {
+    printf("%d ", index);
+    *(int *)acc += *(int *)curr;
+}
+
 int main(int argc, char const *argv[]) {
 
     int arr[5] = {1,2,3,4,5};
+    int s = 0;
+    dll_t *list_a = dll_from_value_array(arr, 5, VALUE, sizeof(*arr));
+    // [1]<=>[2]<=>[3]<=>[4]<=>[5]
+    dll_foreach(list_a, a_sum, &s);
+    printf("\nsum: %d\n", s);
 
-    dll_t *list_a = dll_from_value_array(arr, 5, REFERENCE, sizeof(*arr));
-    dll_display(list_a, a_display);
-    arr[1] = 99;
     dll_display(list_a, a_display);
     dll_delete(list_a, NULL);
 

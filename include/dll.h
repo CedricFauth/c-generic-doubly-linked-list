@@ -24,6 +24,10 @@ typedef void (*delete_data_fun)(void *data);
  */
 typedef void (*display_data_fun)(void *data);
 
+typedef void (*foreach_fun)(int index, void *data, void *usr);
+
+typedef void *(*reduce_fun)(void *data, void *acc);
+
 /**
  * @brief creates new doubly-linked-list (dll)
  * 
@@ -148,5 +152,7 @@ void dll_reverse(dll_t *list);
  * @param list 
  */
 void dll_clear(dll_t *list);
+
+void dll_foreach(dll_t *list, foreach_fun func, void *usr);
 
 #endif//_DOUBLY_LINKED_LIST

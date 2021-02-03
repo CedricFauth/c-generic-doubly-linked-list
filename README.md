@@ -18,6 +18,7 @@
 |Name|Worst Case|Description|
 |-|-|-|
 | dll_new | O(1) | Creates new list |
+| dll_from_value_array | O(n) | array to list |
 | dll_delete | O(n) | Deletes list |
 | dll_display | O(n) | Prints the list |
 | dll_insert | O(n) | Inserts data in list |
@@ -46,7 +47,7 @@
 - [x] structs for list and nodes
 ### Standard Functions
 - [x] dll_new (+ dll_new_node)
-- [x] dll_from_array 
+- [x] dll_from_value_array 
 - [x] dll_delete (+ dll_delete_node)
 - [x] dll_display
 - [x] dll_insert (from both sides)
@@ -59,11 +60,10 @@
 - [ ] dll_extend
 - [x] dll_clear
 ### Higher Order Functions
-- [ ] dll_foreach
+- [x] dll_foreach (can also change data in list)
 - [ ] dll_sort
-- [ ] dll_filter
-- [ ] dll_map
-- [ ] dll_reduce
+- ( [ ] dll_filter (result: new list) )
+- ( [ ] dll_map (result: new list) )
 ### Iterators
 - [ ] dll_iter_begin
 - [ ] dll_iter_end

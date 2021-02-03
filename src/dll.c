@@ -463,3 +463,23 @@ void dll_clear(dll_t *list) {
         _dll_remove_from_begin(list, 0, NULL);
     }
 }
+
+void dll_foreach(dll_t *list, foreach_fun func, void *usr) {
+    if(!list || !func) {
+        error("dll_foreach", "list or function is null");
+        return;
+    }
+    dll_node_t *node = list->end->next;
+    dll_node_t *end = list->end;
+    op_mode mode = list->op_mode;
+    int i = 0;
+    while(node != end) {
+        if (mode == REFERENCE) {
+            (*func)(i, *(void **)node->data, usr);
+        } else { // VALUE
+            (*func)(i, node->data, usr);
+        }
+        ++i;
+        node = node->next;
+    }
+}
