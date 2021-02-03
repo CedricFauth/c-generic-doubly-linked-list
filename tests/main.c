@@ -26,14 +26,7 @@ int main(int argc, char const *argv[]) {
     dll_push_back(list, &t0);dll_display(list, test_display);
     //printf("%d\n", dll_length(list));
 
-    dll_insert(list, -1, &t2);dll_display(list, test_display);
-
-    printf("delete ");
-    tmp *d = &t2;
-    printf("ret: %p\n", (void*)(d = dll_remove(list, 0, d)));
-    test_display(d);
-    printf("\n");
-    dll_display(list, test_display);
+    dll_insert(list, -2, &t2);dll_display(list, test_display);
 
     tmp t;
     t.i = 0;
@@ -43,15 +36,16 @@ int main(int argc, char const *argv[]) {
     t.i = 1;
     t.d = 1.11;
     dll_display(list, test_display);
+
+    dll_reverse(list);
+    dll_display(list, test_display);
+
     printf("%d\n", dll_length(list));
 
-    d = dll_peek(list, 1);
-    test_display(d);
-    d->i = 9876;
-    d = dll_peek(list, 0);
-    test_display(d);
-    d = dll_peek(list, -1);
-    test_display(d);
+    dll_clear(list); dll_display(list, test_display);
+    dll_push_front(list, &t);dll_display(list, test_display);
+    dll_push_front(list, &t2);dll_display(list, test_display);
+
 
     dll_delete(list, NULL);
 }

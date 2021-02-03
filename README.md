@@ -40,9 +40,9 @@
 - [x] dll_pop (from both sides)
 - [x] dll_length
 - [x] dll_peek (from both sides)
-- [ ] dll_reverse
+- [x] dll_reverse
 - [ ] dll_extend
-- [ ] dll_clear
+- [x] dll_clear
 ### Higher Order Functions
 - [ ] dll_foreach
 - [ ] dll_sort

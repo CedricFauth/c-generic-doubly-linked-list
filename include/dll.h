@@ -124,4 +124,18 @@ void *dll_pop_front(dll_t *list, void *dest);
  */
 void *dll_peek(dll_t *list, int pos);
 
+/**
+ * @brief reverses a list
+ * 
+ * @param list 
+ */
+void dll_reverse(dll_t *list);
+
+/**
+ * @brief deletes all data inside list
+ * 
+ * @param list 
+ */
+void dll_clear(dll_t *list);
+
 #endif//_DOUBLY_LINKED_LIST

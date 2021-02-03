@@ -426,3 +426,31 @@ void *dll_peek(dll_t *list, int pos) {
         return _dll_peek_from_begin(list, pos);
     }
 }
+
+// see dll.h
+void dll_reverse(dll_t *list) {
+    if (!list) {
+        error("dll_reverse", "list is null");
+        return;
+    }
+    dll_node_t *node = list->end;
+    dll_node_t *tmp;
+    dll_node_t *end = list->end;
+    do {
+        tmp = node->next;
+        node->next = node->prev;
+        node->prev = tmp;
+        node = tmp;
+    } while(node != end);
+}
+
+//see dll.h
+void dll_clear(dll_t *list) {
+    if (!list) {
+        error("dll_reverse", "list is null");
+        return;
+    }
+    while (list->size > 0) {
+        _dll_remove_from_begin(list, 0, NULL);
+    }
+}
