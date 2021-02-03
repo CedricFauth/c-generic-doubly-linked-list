@@ -25,13 +25,23 @@ void a_sum(int index, void *curr, void *acc) {
 int main(int argc, char const *argv[]) {
 
     int arr[5] = {1,2,3,4,5};
-    int s = 0;
     dll_t *list_a = dll_from_value_array(arr, 5, VALUE, sizeof(*arr));
+
+    // foreach
+    int s = 0;
     // [1]<=>[2]<=>[3]<=>[4]<=>[5]
     dll_foreach(list_a, a_sum, &s);
     printf("\nsum: %d\n", s);
-
     dll_display(list_a, a_display);
+
+    // iterators
+    s = 0;
+    dlli_t *iter = dll_iter(list_a);
+    while(dlli_has_next(iter)) {
+        s += *(int *)dlli_next(iter);
+    }
+    printf("sum: %d\n", s);
+
     dll_delete(list_a, NULL);
 
     /*

@@ -23,6 +23,11 @@ struct _dll_internal {
     op_mode op_mode;
 };
 
+struct _dll_iterator {
+    dll_t *list;
+    dll_node_t *curr;
+};
+
 /**
  * @brief prints an error and details; useful to print error messages
  *
@@ -482,4 +487,77 @@ void dll_foreach(dll_t *list, foreach_fun func, void *usr) {
         ++i;
         node = node->next;
     }
+}
+
+dlli_t *dll_iter(dll_t *list) {
+    if (!list) {
+        error("dll_iterator", "list is null");
+        return false;
+    }
+    dlli_t *iter = malloc(sizeof(*iter));
+    if (!iter) {
+        error("dll_iterator","Could not allocate enough memory");
+        return NULL;
+    }
+    iter->list = list;
+    iter->curr = list->end;
+    return iter;
+}
+
+void dlli_delete(dlli_t *iter) {
+    free(iter);
+}
+
+bool dlli_has_next(dlli_t *iter) {
+    if (!iter) {
+        error("dlli_has_next", "iterator is null");
+        return false;
+    }
+    if (iter->curr->next != iter->list->end) {
+        return true;
+    }
+    return false;
+}
+
+bool dlli_has_prev(dlli_t *iter) {
+    if (!iter) {
+        error("dlli_has_prev", "iterator is null");
+        return false;
+    }
+    if (iter->curr->prev != iter->list->end) {
+        return true;
+    }
+    return false;
+}
+
+void *dlli_next(dlli_t *iter) {
+    if (!iter) {
+        error("dlli_next", "iterator is null");
+        return false;
+    }
+    if (iter->curr->next != iter->list->end) {
+        iter->curr = iter->curr->next;
+        if (iter->list->op_mode == REFERENCE) {
+            return *(void **)iter->curr->data;
+        } else {
+            return iter->curr->data;
+        }
+    }
+    return NULL;
+}
+
+void *dlli_prev(dlli_t *iter) {
+    if (!iter) {
+        error("dlli_prev", "iterator is null");
+        return false;
+    }
+    if (iter->curr->prev != iter->list->end) {
+        iter->curr = iter->curr->prev;
+        if (iter->list->op_mode == REFERENCE) {
+            return *(void **)iter->curr->data;
+        } else {
+            return iter->curr->data;
+        }
+    }
+    return NULL;
 }

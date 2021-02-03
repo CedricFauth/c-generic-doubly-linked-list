@@ -1,6 +1,8 @@
 #ifndef _DOUBLY_LINKED_LIST
 #define _DOUBLY_LINKED_LIST
 
+#include <stdbool.h>
+
 typedef enum mode {
 	VALUE,
 	REFERENCE
@@ -11,6 +13,8 @@ typedef enum mode {
  * forward declaration of dll_t; you can only use dll_t POINTERS
  */
 typedef struct _dll_internal dll_t;
+
+typedef struct _dll_iterator dlli_t;
 
 /**
  * @brief function pointer for deleting user data
@@ -154,5 +158,17 @@ void dll_reverse(dll_t *list);
 void dll_clear(dll_t *list);
 
 void dll_foreach(dll_t *list, foreach_fun func, void *usr);
+
+dlli_t *dll_iter(dll_t *list);
+
+void dlli_delete(dlli_t *iter);
+
+bool dlli_has_next(dlli_t *iter);
+
+bool dlli_has_prev(dlli_t *iter);
+
+void *dlli_next(dlli_t *iter);
+
+void *dlli_prev(dlli_t *iter);
 
 #endif//_DOUBLY_LINKED_LIST
