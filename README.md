@@ -35,6 +35,7 @@
 | dlli_has_prev | O(1) | checks if previous data exists | 
 | dlli_next | O(1) | returns next data | 
 | dlli_prev | O(1) | returns previous data | 
+| dll_sort | O(n*log(n)) | mergesort by custom function |
 
 ## Conventions
 - write smart and clean code - but readable
