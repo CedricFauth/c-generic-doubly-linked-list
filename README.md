@@ -35,7 +35,7 @@
 | dlli_has_prev | O(1) | checks if previous data exists | 
 | dlli_next | O(1) | returns next data | 
 | dlli_prev | O(1) | returns previous data | 
-| dll_sort | O(n*log(n)) | mergesort by custom function |
+| dll_sort (untested) | O(n*log(n)) | mergesort by custom function |
 
 ## Conventions
 - write smart and clean code - but readable
@@ -68,7 +68,7 @@
 - [x] dll_clear
 ### Higher Order Functions
 - [x] dll_foreach (can also change data in list)
-- [ ] dll_sort
+- [x] dll_sort
 - ( [ ] dll_filter (result: new list) )
 - ( [ ] dll_map (result: new list) )
 ### Iterators
